@@ -38,7 +38,9 @@ func GenExcelData(data chan string) {
 
 	}
 
-	_ = file.Save()
+	if err := file.SaveAs("test1.xlsx"); err != nil {
+		fmt.Println(err)
+	}
 }
 
 func ExcelAxis(col, row int) string {
