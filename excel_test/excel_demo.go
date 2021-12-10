@@ -12,9 +12,10 @@ var wg sync.WaitGroup
 //模拟多个goroutine相关
 func main() {
 	data := make(chan string)
+	wg.Add(1)
 	go GenData(data)
+	wg.Add(1)
 	go GenExcelData(data)
-	wg.Add(2)
 	wg.Wait()
 }
 
@@ -23,6 +24,7 @@ func GenData(data chan string) {
 	for i := 0; i < 10; i++ {
 		data <- strconv.Itoa(i + 100)
 	}
+	close(data)
 }
 
 func GenExcelData(data chan string) {
@@ -36,7 +38,6 @@ func GenExcelData(data chan string) {
 
 	}
 
-	file.DeleteSheet("Sheet1")
 	_ = file.Save()
 }
 
